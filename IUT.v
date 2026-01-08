@@ -25,6 +25,7 @@ Unset Strict Implicit.
 Unset Printing Implicit Defensive.
 
 Import GRing.Theory.
+Import Num.Theory.
 
 Open Scope ring_scope.
 
@@ -517,6 +518,7 @@ Section DiagramAnalysis.
 Variable R : numDomainType.
 Variable ell : nat.
 Hypothesis ell_pos : (0 < ell)%N.
+Hypothesis R_char0 : [char R] =i pred0.
 
 Record RCopyNode := mkRCN {
   rcn_id : nat
@@ -575,7 +577,10 @@ Definition diagram_has_uniform_scaling (D : SchStixDiagram) : Prop :=
 
 Lemma tate_nonuniform_at_1 (H1 : (1 < ell)%N) :
   tate_curve_scaling (Ordinal H1) <> 1.
-Proof. Admitted.
+Proof.
+  rewrite /tate_curve_scaling /= -[1]/(1%:R) => /eqP.
+  by rewrite eqr_nat.
+Qed.
 
 Definition commutes_and_tate_implies (D : SchStixDiagram) : Prop :=
   diagram_commutes D ->
@@ -594,7 +599,12 @@ Definition tate_and_uniform_incompatible (D : SchStixDiagram) (H1 : (1 < ell)%N)
 
 Lemma tate_uniform_contradiction (D : SchStixDiagram) (H1 : (1 < ell)%N) :
   tate_and_uniform_incompatible D H1.
-Proof. Admitted.
+Proof.
+  rewrite /tate_and_uniform_incompatible => Htate Hunif.
+  have Heq : tate_curve_scaling (Ordinal H1) = 1.
+    by rewrite -(Htate (Ordinal H1)) Hunif.
+  by move: Heq; apply: tate_nonuniform_at_1.
+Qed.
 
 Definition core_question (D : SchStixDiagram) : Prop :=
   diagram_commutes D ->
