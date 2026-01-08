@@ -370,4 +370,23 @@ Proof.
   exact: (agree_implies_all_jsq_eq_1 Ha (Ordinal H1)).
 Qed.
 
+Hypothesis R_char_gt_3 : (3%:R : R) != 0.
+
+Lemma four_neq_one_R : (4%:R : R) != 1.
+Proof.
+  apply/negP => /eqP H4eq1.
+  move: R_char_gt_3.
+  have H3: (3%:R : R) = 4%:R - 1%:R.
+    by rewrite -natrB //=.
+  by rewrite H3 H4eq1 subrr eqxx.
+Qed.
+
+Lemma no_agreement (f : 'I_ell -> R) (H1 : (1 < ell)%N) :
+  ~ uniform_and_jsquared_agree f.
+Proof.
+  move=> Ha.
+  move: (agree_implies_4_eq_1 H1 Ha).
+  by move/eqP; rewrite (negPf four_neq_one_R).
+Qed.
+
 End Inconsistency.
