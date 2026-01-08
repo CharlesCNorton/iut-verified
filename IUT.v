@@ -16,3 +16,36 @@
 (*     License: MIT                                                           *)
 (*                                                                            *)
 (******************************************************************************)
+
+From mathcomp Require Import all_ssreflect.
+From mathcomp Require Import all_algebra.
+From mathcomp Require Import all_field.
+From mathcomp Require Import all_real_closed.
+
+From mathcomp.analysis Require Import reals normedtype.
+
+Set Implicit Arguments.
+Unset Strict Implicit.
+Unset Printing Implicit Defensive.
+
+Import GRing.Theory.
+Import Num.Theory.
+
+Open Scope ring_scope.
+
+(******************************************************************************)
+(*                                                                            *)
+(*                          PART I: FOUNDATIONS                               *)
+(*                                                                            *)
+(******************************************************************************)
+
+Section Foundations.
+
+(******************************************************************************)
+(*  We begin by establishing the basic structures needed for IUT:             *)
+(*  - Number fields and their places                                          *)
+(*  - Local fields (archimedean and non-archimedean)                          *)
+(*  - Basic category-theoretic infrastructure                                 *)
+(******************************************************************************)
+
+End Foundations.
