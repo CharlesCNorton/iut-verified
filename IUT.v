@@ -539,3 +539,68 @@ Definition cor_312_from_311 (theta_deg q_deg : R) : Prop :=
   - theta_deg <= - q_deg.
 
 End CriticalStep.
+
+(******************************************************************************)
+(*                                                                            *)
+(*     PART XV: THE CONCRETE DISPUTED COMPARISON (Scholze-Stix Section 2.2)   *)
+(*                                                                            *)
+(******************************************************************************)
+
+Section ConcreteDispute.
+
+Variable R : realType.
+Variable ell : nat.
+
+Hypothesis ell_pos : (ell > 0)%N.
+
+Definition abstract_theta_pilot (j : nat) : R := (j * j)%:R.
+
+Definition concrete_theta_pilot (j : nat) : R := (j * j)%:R.
+
+Definition q_pilot_value : R := 1.
+
+Record IdentificationMap := mkIdMap {
+  idmap_scale : R;
+  idmap_source_label : nat;
+  idmap_target_label : nat
+}.
+
+Definition identity_map : IdentificationMap :=
+  mkIdMap 1 0 0.
+
+Definition j_scaled_map (j : nat) : IdentificationMap :=
+  mkIdMap (j * j)%:R j 0.
+
+Definition compose_id_maps (f g : IdentificationMap) : IdentificationMap :=
+  mkIdMap (idmap_scale f * idmap_scale g)
+          (idmap_source_label f)
+          (idmap_target_label g).
+
+Lemma compose_identity_left : forall m : IdentificationMap,
+  idmap_scale (compose_id_maps identity_map m) = idmap_scale m.
+Proof.
+  move=> m.
+  rewrite /compose_id_maps /identity_map /=.
+  by rewrite mul1r.
+Qed.
+
+Lemma j_scaled_map_scale : forall j : nat,
+  idmap_scale (j_scaled_map j) = (j * j)%:R.
+Proof.
+  by move=> j.
+Qed.
+
+Definition consistent_scaling : Prop :=
+  forall j : nat, (1 <= j <= ell)%N ->
+    idmap_scale (j_scaled_map j) = 1.
+
+Definition inconsistent_for_j (j : nat) : Prop :=
+  (j > 1)%N -> idmap_scale (j_scaled_map j) <> 1.
+
+Lemma j_eq_2_inconsistent : (2 * 2)%:R <> (1 : R).
+Proof.
+  rewrite -[1]/(1%:R).
+  by move/eqP; rewrite eqr_nat.
+Qed.
+
+End ConcreteDispute.
