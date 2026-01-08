@@ -17,6 +17,136 @@
 (*                                                                            *)
 (******************************************************************************)
 
+(* TODO: Formalization Roadmap
+
+   1. Define sum_of_squares n := \sum_(1 <= j < n.+1) (j * j)
+   2. Define sum_linear n := \sum_(1 <= j < n.+1) j
+   3. Compute sum_of_squares 1 = 1
+   4. Compute sum_of_squares 2 = 5
+   5. Compute sum_of_squares 3 = 14
+   6. Compute sum_linear 1 = 1
+   7. Compute sum_linear 2 = 3
+   8. Compute sum_linear 3 = 6
+   9. Prove sum_of_squares n.+1 = sum_of_squares n + (n.+1) * (n.+1)
+   10. Prove sum_linear n.+1 = sum_linear n + n.+1
+   11. Prove 6 * sum_of_squares 0 = 0 * 1 * 1
+   12. Prove 6 * sum_of_squares n = n * (n + 1) * (2 * n + 1) assuming IH
+   13. Prove 6 * sum_of_squares n.+1 = (n.+1) * (n + 2) * (2 * n + 3) by algebra
+   14. Prove 6 * sum_of_squares n = n * (n + 1) * (2 * n + 1) by induction
+   15. Prove 2 * sum_linear 0 = 0 * 1
+   16. Prove 2 * sum_linear n = n * (n + 1) assuming IH
+   17. Prove 2 * sum_linear n.+1 = (n.+1) * (n + 2) by algebra
+   18. Prove 2 * sum_linear n = n * (n + 1) by induction
+   19. Define sum_diff n := sum_of_squares n - sum_linear n
+   20. Prove sum_diff n = \sum_(1 <= j < n.+1) (j * j - j)
+   21. Prove j * j - j = j * (j - 1) for j >= 1
+   22. Prove j * (j - 1) >= 0 for j >= 1
+   23. Prove j * (j - 1) > 0 for j >= 2
+   24. Prove sum_diff 1 = 0
+   25. Prove sum_diff 2 = 2
+   26. Prove sum_diff n > 0 for n >= 2
+   27. Prove sum_of_squares n > sum_linear n for n >= 2
+   28. Define mochizuki_bound ell delta deg_q := (sum_of_squares ell)%:R * delta - deg_q
+   29. Define scholze_stix_bound ell delta deg_q := (sum_linear ell)%:R * delta - deg_q
+   30. Prove mochizuki_bound - scholze_stix_bound = (sum_diff ell)%:R * delta
+   31. Prove delta > 0 -> sum_diff ell > 0 -> mochizuki_bound > scholze_stix_bound
+   32. Prove ell >= 2 -> delta > 0 -> mochizuki_bound > scholze_stix_bound
+   33. Define critical_delta ell deg_q := deg_q / (sum_linear ell)%:R
+   34. Prove sum_linear ell > 0 for ell >= 1
+   35. Prove critical_delta ell deg_q > 0 for ell >= 1, deg_q > 0
+   36. Prove scholze_stix_bound ell (critical_delta ell deg_q) deg_q = 0
+   37. Prove delta < critical_delta -> scholze_stix_bound < 0
+   38. Prove delta <= critical_delta -> scholze_stix_bound <= 0
+   39. Compute sum_of_squares 2 / sum_linear 2 = 5 / 3
+   40. Prove sum_of_squares ell > sum_linear ell for ell >= 2
+   41. Prove (sum_of_squares ell)%:R * critical_delta > deg_q for ell >= 2
+   42. Prove mochizuki_bound ell (critical_delta ell deg_q) deg_q > 0 for ell >= 2
+   43. Define RCopyNode := { rcn_id : nat }
+   44. Define RIdentification := { ri_source; ri_target; ri_scale : R }
+   45. Define ri_compose f g := mkRI (ri_source g) (ri_target f) (ri_scale f * ri_scale g)
+   46. Define ri_identity n := mkRI n n 1
+   47. Prove ri_scale (ri_compose f g) = ri_scale f * ri_scale g
+   48. Prove ri_scale (ri_identity n) = 1
+   49. Prove ri_compose f (ri_identity (ri_source f)) = f up to node equality
+   50. Prove ri_compose (ri_identity (ri_target f)) f = f up to node equality
+   51. Define FullSchStixDiagram with six nodes
+   52. Extend with edge theta_link from R_theta_abs to R_q_abs
+   53. Extend with conc_to_abs_theta : 'I_ell -> RIdentification
+   54. Extend with conc_to_abs_q : RIdentification
+   55. Extend with conc_to_arith_theta : 'I_ell -> RIdentification
+   56. Extend with conc_to_arith_q : RIdentification
+   57. Extend with arith_comparison : RIdentification
+   58. Define extracted_scaling D j := ri_scale (conc_to_abs_theta D j)
+   59. Define arithmetic_scaling D j := ri_scale (conc_to_arith_theta D j)
+   60. Define is_jsquared_scaling D := forall j, extracted_scaling D j = ((val j).+1 ^ 2)%:R
+   61. Define is_uniform_scaling D := forall j, extracted_scaling D j = 1
+   62. Define is_j_scaling D := forall j, extracted_scaling D j = ((val j).+1)%:R
+   63. Define path_upper D j := ri_scale (conc_to_abs_theta D j) * ri_scale (theta_link D)
+   64. Define path_lower D j := ri_scale (conc_to_arith_theta D j) * ri_scale (arith_comparison D)
+   65. Define diagram_commutes D := forall j, path_upper D j = path_lower D j
+   66. Simplify: assume conc_to_abs_q and conc_to_arith_q have scale 1
+   67. Redefine diagram_commutes D := forall j, path_upper D j = path_lower D j
+   68. Prove diagram_commutes D -> path_upper j1 / path_upper j2 = path_lower j1 / path_lower j2
+   69. Prove diagram_commutes D -> extracted_scaling j1 / j2 = arithmetic_scaling j1 / j2
+   70. Define arithmetic_side_uniform D := forall j, arithmetic_scaling D j = 1
+   71. Define arithmetic_side_jsquared D := forall j, arithmetic_scaling D j = ((val j).+1 ^ 2)%:R
+   72. Define link_scale_one D := ri_scale (theta_link D) = 1
+   73. Define arith_comp_one D := ri_scale (arith_comparison D) = 1
+   74. Define consistent_identifications D := arithmetic_side_uniform /\ link_scale_one /\ arith_comp_one
+   75. Prove diagram_commutes D -> arithmetic_side_uniform D -> path_upper D j = extracted_scaling D j
+   76. Prove diagram_commutes D -> arithmetic_side_uniform D -> arith_comp_one D -> extracted_scaling D j = 1
+   77. Prove diagram_commutes D -> consistent_identifications D -> is_uniform_scaling D
+   78. Prove is_jsquared_scaling D -> extracted_scaling D (Ordinal H1) = 4 where H1 : 1 < ell
+   79. Prove is_uniform_scaling D -> extracted_scaling D (Ordinal H1) = 1
+   80. Prove 4%:R <> 1 :> R for R with char R > 3
+   81. Prove is_jsquared_scaling D -> ~ is_uniform_scaling D for ell >= 2
+   82. Prove diagram_commutes D -> consistent_identifications D -> ~ is_jsquared_scaling D
+   83. Define effective_bound D delta deg_q := \sum_(j < ell) extracted_scaling D j * delta - deg_q
+   84. Prove is_uniform_scaling D -> effective_bound D delta deg_q = ell%:R * delta - deg_q
+   85. Prove is_uniform_scaling D -> effective_bound D = scholze_stix_bound
+   86. Prove is_jsquared_scaling D -> effective_bound D = (sum_of_squares ell)%:R * delta - deg_q
+   87. Prove is_jsquared_scaling D -> effective_bound D = mochizuki_bound
+   88. Prove diagram_commutes D -> consistent D -> effective_bound D = scholze_stix_bound
+   89. Prove diagram_commutes D -> consistent D -> delta <= critical -> effective_bound D <= 0
+   90. Define Ind1_data := { ind1_auts : Type; ind1_action : ind1_auts -> R -> R }
+   91. Define ind1_preserves_mult ind := forall a x y, action a (x * y) = action a x * action a y
+   92. Define indeterminacy_region ind x := fun y => exists a, y = ind1_action ind a x
+   93. Define region_contains ind x y := indeterminacy_region ind x y
+   94. Define blurring_absorbs_jsquared ind := forall j x, region_contains ind x (((val j).+1 ^ 2)%:R * x)
+   95. Prove blurring_absorbs_jsquared ind -> region_contains ind 1 ((ell ^ 2)%:R)
+   96. Define region_diameter ind := sup { |y - x| : region_contains ind x y, |x| = 1 }
+   97. Prove blurring_absorbs_jsquared ind -> region_diameter ind >= (ell^2 - 1)%:R
+   98. Define blurred_mochizuki_bound ind delta deg_q := mochizuki_bound - region_diameter ind * delta
+   99. Prove blurring_absorbs -> blurred_bound <= mochizuki_bound - (ell^2 - 1)%:R * delta
+   100. Prove ell >= 2 -> (ell^2 - 1) >= ell
+   101. Prove ell >= 2 -> (sum_of_squares ell) - (ell^2 - 1) <= sum_linear ell
+   102. Prove ell >= 3 -> (sum_of_squares ell) - (ell^2 - 1) < sum_linear ell
+   103. Prove blurring_absorbs -> ell >= 2 -> blurred_bound <= scholze_stix_bound + C
+   104. Prove blurring_absorbs -> ell >= 3 -> blurred_bound < scholze_stix_bound + delta
+   105. Prove blurring_absorbs -> delta <= critical -> blurred_bound <= 0
+   106. Define scaling_outcome D ind := consistent D \/ (jsquared D /\ ~consistent D) \/ blurring_absorbs ind
+   107. Prove diagram_commutes D -> consistent D -> effective_bound D = scholze_stix_bound
+   108. Prove jsquared D -> ~consistent D -> effective_bound D = mochizuki_bound
+   109. Prove blurring_absorbs ind -> blurred_bound <= scholze_stix_bound for large ell
+   110. Define useful_bound b := b > 0
+   111. Define vacuous_bound b := b <= 0
+   112. Prove delta <= critical -> vacuous_bound (scholze_stix_bound)
+   113. Prove delta <= critical -> ell >= 2 -> useful_bound (mochizuki_bound)
+   114. Prove diagram_commutes D -> consistent D -> delta <= critical -> vacuous_bound (effective_bound D)
+   115. Prove diagram_commutes D -> jsquared D -> ~consistent D -> delta > moch_critical -> useful_bound (effective_bound D)
+   116. Prove blurring_absorbs ind -> delta <= critical -> vacuous_bound (blurred_bound)
+   117. State trilemma: diagram_commutes D -> (consistent /\ vacuous) \/ (jsquared /\ ~consistent) \/ (blurring /\ vacuous)
+   118. Prove trilemma by case analysis
+   119. Define iut_succeeds D ind delta deg_q := commutes /\ jsquared /\ useful /\ ~blurring
+   120. Prove iut_succeeds D ind delta deg_q -> ~consistent_identifications D
+   121. Prove iut_succeeds D ind delta deg_q -> ~blurring_absorbs_jsquared ind
+   122. Prove iut_succeeds D ind delta deg_q -> delta > deg_q / (sum_of_squares ell)%:R
+   123. State necessary_conditions: iut_succeeds -> (~consistent /\ ~blurring /\ delta > moch_critical)
+   124. Prove necessary_conditions
+   125. State ss_position: commutes -> (consistent \/ blurring) -> delta <= critical -> vacuous
+   126. Prove ss_position
+*)
+
 From mathcomp Require Import all_ssreflect.
 From mathcomp Require Import all_algebra.
 
