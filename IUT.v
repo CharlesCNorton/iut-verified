@@ -239,3 +239,87 @@ Lemma jsq_at_2_is_4 : (2 * 2 = 4)%N.
 Proof. by []. Qed.
 
 End Resolution.
+
+Record PrimeStrip := mkPS {
+  ps_data : Type
+}.
+
+Record HodgeTheater := mkHT {
+  ht_label : nat;
+  ht_theta_strip : PrimeStrip;
+  ht_q_strip : PrimeStrip
+}.
+
+Record ThetaLink := mkTL {
+  tl_domain : HodgeTheater;
+  tl_codomain : HodgeTheater;
+  tl_strip_map : PrimeStrip -> PrimeStrip
+}.
+
+Definition tl_identifies_theta_with_q (link : ThetaLink) : Prop :=
+  tl_strip_map link (ht_theta_strip (tl_domain link)) =
+  ht_q_strip (tl_codomain link).
+
+Record LogThetaLattice := mkLTL {
+  ltl_theaters : int -> int -> HodgeTheater;
+  ltl_theta_links : int -> int -> ThetaLink;
+  ltl_log_links : int -> int -> PrimeStrip -> PrimeStrip
+}.
+
+Section TateCurve.
+
+Variable K : fieldType.
+Variable q : K.
+Hypothesis q_nonzero : q != 0.
+Hypothesis q_not_root_of_unity : forall n : nat, (0 < n)%N -> q ^+ n != 1.
+
+Definition tate_curve := K.
+
+Variable ell : nat.
+Hypothesis ell_pos : (0 < ell)%N.
+
+Definition torsion_point (j : 'I_ell) : K := q ^+ (nat_of_ord j).
+
+Definition theta_at_torsion (j : 'I_ell) : K :=
+  q ^+ ((nat_of_ord j).+1 * (nat_of_ord j).+1).
+
+Definition q_pilot : K := q.
+
+Definition theta_q_ratio (j : 'I_ell) : K :=
+  theta_at_torsion j / q_pilot.
+
+Definition theta_exponent (j : 'I_ell) : nat :=
+  (nat_of_ord j).+1 * (nat_of_ord j).+1.
+
+Lemma theta_exp_1 : theta_exponent (Ordinal ell_pos) = 1.
+Proof. by rewrite /theta_exponent /= muln1. Qed.
+
+Lemma theta_exp_grows (j : 'I_ell) :
+  ((nat_of_ord j).+1 <= theta_exponent j)%N.
+Proof.
+  rewrite /theta_exponent.
+  by rewrite leq_pmulr // ltnW.
+Qed.
+
+Definition derived_scalar (j : 'I_ell) : nat := theta_exponent j.
+
+End TateCurve.
+
+Section Connection.
+
+Variable R : numDomainType.
+Variable ell : nat.
+Hypothesis ell_ge_2 : (2 <= ell)%N.
+
+Definition tate_derived_scalar (j : 'I_ell) : R :=
+  ((nat_of_ord j).+1 * (nat_of_ord j).+1)%:R.
+
+Lemma tate_scalar_at_0 (H : (0 < ell)%N) :
+  tate_derived_scalar (Ordinal H) = 1.
+Proof. by rewrite /tate_derived_scalar /= muln1. Qed.
+
+Lemma tate_scalar_at_1 (H : (1 < ell)%N) :
+  tate_derived_scalar (Ordinal H) = 4%:R.
+Proof. by rewrite /tate_derived_scalar /=. Qed.
+
+End Connection.
