@@ -1,0 +1,377 @@
+Why abc is still a conjecture
+PETER SCHOLZE AND JAKOB STIX
+In March 2018, the authors spent a week in Kyoto at RIMS of intense and constructive
+discussions with Prof. Mochizuki and Prof. Hoshi about the suggested proof of the abc conjecture.
+We thank our hosts for their hospitality and generosity which made this week very special.
+We, the authors of this note, came to the conclusion that there is no proof. We are going to
+explain where, in our opinion, the suggested proof has a problem, a problem so severe that in
+our opinion small modifications will not rescue the proof strategy. We supplement our report
+by mentioning dissenting views from Prof. Mochizuki and Prof. Hoshi about the issues we raise
+with the proof and whether it constitutes a gap at all, cf. the report by Mochizuki.
+1. With Belyi maps from IUTT to Vojta's inequality and abc
+1.1. The goal in terms of Vojta's inequality. The abc-conjecture goes back to Masser and
+Conjecture 1. Let  > 0. Then for all coprime integers a, b, c with a + b + c = 0 we have
+log(max{|a|, |b|, |c|}) < (1 + ) · log(p) + O(1)
+where the constant O(1) depends only on .
+The abc-conjecture is a special case for the projective line PQ1 with respect to the divisor
+D = 0 + 1 +  of Vojta's height inequality. The general Vojta inequality is conjectured for the
+height function hX(D)(P ) of any hyperbolic curve (X, D), i.e. where X (D) is ample.
+Definition 2. Let k be a number field, ok its ring of integers, and X/k a smooth projective
+geometrically connected curve. We denote an algebraic closure of k by k¯.
+(1) The absolute logarithmic root discriminant of a point P  X(k¯) is
+where (P ) is the residue field of the closed point of X supporting P , and (P )/Q  Z
+denotes the discriminant of (P )/Q.
+(2) Let D  X be a reduced (possibly empty) divisor and set X = X \ D. For any closed
+point P  X we define the logarithmic conductor nD1 (P ) depending on the choice of
+a proper regular ok-model X  Spec(ok) as follows.
+Let D be the closure of D in X , and let (P ) denote the residue field of P . For the
+unique extension P : Spec(o(P ))  X of P we consider P-1(D) as an effective divisor
+on Spec(o(P )). We then set
+n1D(P )  :=  deg(P-1(D )red)  =                                                      1  :  Q]            log(N (v)).
+Here pv is the prime ideal corresponding to the finite place v of k of norm N (v) = #ok/pv.
+Different choices of models lead to logarithmic conductors that agree up to contributions
+at a fixed finite set of places, hence up to O(1). Therefore nD1 (-) is well defined up to
+Date: August 23, 2018.
+2                    PETER SCHOLZE AND JAKOB STIX
+a bounded function. It counts, as an Arakelov degree, the number of places where P
+becomes congruent to a point in the boundary divisor D.
+Conjecture 3 (Uniform Vojta inequality for hyperbolic curves). Let k be a number field and
+let X/k be a smooth geometrically connected curve with smooth compactification X such that
+X (D) is ample, where D = (X \ X)red. Let  > 0 and d  1. Then for all points P  X(k¯)
+with [(P ) : Q]  d, we have
+hX(D)(P ) < (1 + ) d(P ) + n1D(P ) + O,d,X (1)                 (1.1)
+Remark 4. The uniform version of Vojta's inequality with respect to the degree of the number
+field as stated in Conjecture 3 behaves well under branched covers, cf. [GenEll, Proposition 1.7]
+or [BG06, Theorem 14.416], and indeed is claimed to follow from Mochizuki's proof.
+For a thorough discussion of the abc conjecture in relation to Voijta's conjecture we refer to
+1.2. Frey curves. Using Belyi maps as in [Belyi, Theorem 2.5] we may reduce Conjecture 3 to
+the moduli stack of elliptic curves Mell, i.e., to elliptic curves over number fields. In this case a
+form of the inequality is conjectured as Szpiro's conjecture.
+More precisely, in [GenEll, Theorem 2.1 and §3, §4] Mochizuki describes a reduction for all
+fixed d  1 to an inequality for all number fields k of degree [k : Q]  d and all elliptic curves
+E/k corresponding to points P  Mell(k), such that
+(1) The local data at places above 2 and  belong to a compact set, hence continuous local
+invariants at 2 and at  are bounded.
+(2) The elliptic curve E/k has split semistable reduction everywhere1. Hence, using local
+Grmig  Grmig/qvZ (E ×k kv)rig,
+we have a collection of local Tate parameters qv  kv at finite places v of multiplicative
+bad reduction, and a finite Arakelov divisor qE = E bad red. at v v(qv) · v of degree
+deg(qE) = [k : Q] v v(qv) log(N (v)).
+The corresponding height term h(P ) with respect to log-differentials of Mell is then
+thanks and subject to the constraints of (1) that allow us to ignore contributions at
+h(P )  =  1  deg(qE )  +  O(h(P )1/2  +  1).                   (1.2)
+Note that the degree of the boundary  = M¯ell \ Mell is 1/2 while the degree of the
+sheaf of log-differentials is 1/12 explaining the factor of 6.
+(3) There is a prime number = (P ) such that
+(i) there are constants c1, c2 > 0 depending only on d with
+h(P )1/2   h(P )1/2 · (c1 + c2 · log(h(P ))),                  (1.3)
+(ii) the image of the mod Galois representation contains SL2(F ):
+: Galk  GL(E[ ](k¯)) GL2(F ),
+(iii) locally at places v of bad reduction, the extension arising from the local Tate
+0  µ  E[ ]  Z/ Z  0
+does not split. The extension class is given by qv  kv×/(kv×) , so we require qv not
+1Arbitrary elliptic curves E0/k0 are dealt with after scalar extension such that E = E0 ×k0 k acquires split
+semistable reduction. This works because k can be chosen with a uniform bound on [k : k0], e.g., by adjoining
+coordinates of all 12-torsion points.
+Why abc is still a conjecture                                             3
+The above set-up misses an exceptional list of elliptic curves (E/k without a "core", with
+complex multiplication, etc.) that is `sparse' and can be dealt with separately. We omit the
+Remark 5. For fixed d  1 and any bound b > 0 there are only finitely many E/k corresponding
+to P  Mell(k) as above with [k : Q]  d and h(P )  b. This follows from Faltings' theorem
+(Shafarevich conjecture) applied to the Weil restriction A = Rk|Q(E) which is an abelian variety
+A/Q of dimension bounded by d and good reduction outside a fixed finite set of primes depending
+on the height bound b. There are only finitely many isomorphism classes of such abelian varieties
+and the map E/k  A/Q has finite fibres.
+Claim 6 ([IUTT-4, Theorem 1.10]). Fix a natural number d  1.
+There are functions d, d : N  R depending of d, such that d( )  0, for  , and
+d( ) = Od(1) and, for all number fields k of degree [k : Q]  d and elliptic curves E/k as above
+corresponding to P  Mell(k) and = (P ),
+1  deg(qE)  (1 + d(      ))  d(P ) + n1(P )          + d( ) ·    .
+If  c  >  0  is  such     that   (1.2)  says  h(P )    1  deg(qE )   +  c · (h(P )1/2  + 1)  for  all  E/k  as  above,  then
+the inequalities of Claim 6 and (1.3) yield
+h(P ) ·      1   -  c  ·  (1  +  h(P  )-1/2)  + d( )(c1   +   c2  ·  log(h(P  )))      (1 + d( ))(d(P ) + n1(P )).
+Now we choose  > 0. As soon as for large h(P ) and thus large = (P )  h(P )1/2 we have
+0 < 1 + d( ) <              1 - c · (1 + h(P )-1/2) + d( )(c1 + c2 · log(h(P )))             · (1 + ),
+we conclude Vojta's inequality
+h(P )  (1 + )(d(P ) + n 1 (P )) + O,d(1)
+by adjusting the constant in O,d(1) to cover the finitely many cases of small h(P ), cf. Remark 5.
+1.3. How IUTT derives the inequality. For an odd prime number we set
+Moreover, for a local Tate parameter qv  kv at a finite place v of split multiplicative reduction
+of E we choose a 2 -th root2
+of qv uniquely defined up to a root of unity. These roots define the Arakelov divisor
+q=                        v(q ) · v =      1  qE .
+E   E bad red. at v          v       2
+Claim 6 is deduced in [IUTT-4, Theorem 1.10] from an inequality that reads
+- |log(q)|  -|log()|                                                      (1.4)
+and which is the main claim of [IUTT-3, Corollary 3.12], see our comments in Section §2.2. Note
+that the symbols in (1.4) are not just `minus the absolute values of the logarithm of something',
+but they rather have a distinct involved meaning defined in [IUTT-3, page 16, Corollary 3.12].
+In fact, the left side of (1.4) is nothing but
+-|log(q)| = - deg(q ) = -       1     deg(qE ).
+2These roots play a role later, see Sections §2.1.6-§2.1.9.
+4                                     PETER SCHOLZE AND JAKOB STIX
+The right side of (1.4) is in essential approximation (d(P )v is the v-part of the logarithmic root
+1             j  ·  d(P )v  -  j2     1    Q] v(qv) log N (v)            (1.5)
+-|log()|                                           2  [k :
+1 ( + 1)                            1 ( + 1)(2 + 1)
+=·                       d(P ) - ·                                  deg(qE )
+2                                  12
+=            d(P ) - 6 deg(qE) .
+Substituting  this  back  into  (1.4)  yields   after  solving  for   1   deg(qE )     that
+1                   1-      12 -1          · d(P ).
+6 deg(qE)
+The error in the is taken care of with a linear term in on the right side, so this achieves a
+proof of Claim 6. We are going to argue that the reasoning for (1.5) in [IUTT-3, Corollary 3.12]
+rather describes the following inequality (with the factor j2 missing):
+1                                      1
+-|log()|              v j=1 j · d(P )v - 2 [k : Q] v(qv) log N (v)                  (1.6)
++1                  1
+=            · d(P ) -        deg(qE ).
+2                2
+Starting from the corrected inequality we obtain
+0 d(P )
+which is essentially free of content.
+2. Hodge theaters and Frobenioid prime strips
+2.1. Glossary: IUTT-terminology and how we may think of these objects. The IUTT
+papers introduce a large amount of terminology. To facilitate the discussion, we will describe
+(only) the notions that are strictly relevant to explain what we regard as the error. This will
+involve certain radical simplifications, and it might be argued that such simplifications strip
+away all the interesting mathematics that forms the core of Mochizuki's proof. Towards this
+objection we can offer four excuses:
+(1) During our discussion in Kyoto, Mochizuki agreed that some of these simplifications are
+OK, for example regarding the critical notion of F ×µ-prime strips below.
+(2) Generally, the discussions in Kyoto were at a level only slightly more sophisticated than
+what is reflected in the simplifications below, and Mochizuki agreed that this does not
+result in an essential obfuscation of the ideas. We also discussed the deeper parts of
+the theory, and Mochizuki agreed that we had a good understanding of the substantial
+mathematical content.
+(3) When it comes to the more drastic simplifications indicated below, such as merely iden-
+tifying the choice of a Hodge theater with the choice of a curve abstractly isomorphic to
+X, or simply identifying identical objects along the identity, these are inessential to the
+point we are making, and Mochizuki was not able to convince us during the week why
+such a simplification was not allowed.
+(4) We are certain that even with all subtleties restored, the issue we are pointing out
+will prevail, and it is easier to point to the key issue with these surrounding subtleties
+Why abc is still a conjecture                                        5
+2.1.1. Initial -data. This is essentially an elliptic curve E over a number field k, together
+with a choice of a prime number , as above. Often, one considers instead the once-punctured
+hyperbolic curve X = E \ {0}.
+There are many coverings of X that are considered in the IUTT papers, both over k and its
+localizations. These will play no role for the following discussion, so we omit them here.
+2.1.2. Hodge theater. These contain data of two types, "étale-like objects" and "Frobenius-like
+Roughly, the "étale-like data", often denoted D or D, is given by the abstract topological group
+1(X), considered as a group up to inner automorphism. Equivalently, as is done in the IUTT
+papers, we may think of the abstract Galois category of finite étale covers of X, without a choice
+of base point. At this point, it is useful to recall the following striking result of Mochizuki.
+Theorem 7 ([Anab3, Theorem 1.9, Corollary 1.10]). Consider the category whose objects are
+connected curves X of strictly Belyi type over a field k that is either a number field or a p-
+adic field, and whose morphisms are finite étale morphisms of schemes. The functor taking
+X to 1(X) defines a functor to the category whose objects are topological groups, and whose
+morphisms G  H are H-conjugacy classes of injective open maps of topological groups. This
+functor is fully faithful, and one can give an explicit quasi-inverse functor.
+Moreover, once-punctured elliptic curves as considered in the IUTT papers, and their con-
+nected finite étale covers, are of strictly Belyi type.3
+Remark 8. In fact, a slightly stronger statement is true: One can extend the result to cover the
+morphisms arising from Xkv  X if X lives over a number field k and kv is a nonarchimedean
+Remark 9. Anabelian geometry is supposed to be the key to Mochizuki's proof. However, here
+we see that in the IUTT papers, we are (for the essential part) in a situation where anabelian
+geometry holds true in the sense that geometry and group theory are equivalent. We could not
+find the point where it is essential to work with fundamental groups ­ there are no additional
+isomorphisms of fundamental groups that do not come from isomorphisms of schemes, precisely
+because of Mochizuki's theorem.4
+The "Frobenius-like picture" is an enhancement of the "étale-like picture", essentially consisting
+of the topological group 1(X) together with an action on a monoid, e.g. the group k¯× of units
+in k¯.5 Here again, in many situations the forgetful functor from the category of pairs ( M )
+of a topological group acting on a topological monoid (and isomorphisms as morphisms) to
+the category of topological groups  (and isomorphisms as morphisms) is an equivalence of
+categories on the essential image of X  (1(X) k¯×). This is a consequence of Kummer
+theory: As U ranges over open subgroups of 1(X), there is an injection
+k¯×  -lim H1(U, Z(1)) ,
+and there are almost no compatible automorphisms of k¯× and its associated
+3The  final  statement  follows  from  the  finite  étale  correspondence  E  \  {0}   [2]  E  \  E[2]    P1  \  {0, 1, , },
+recalling that strictly Belyi type means that there is such a finite étale correspondence from the curve to a
+hyperbolic curve of genus 0.
+4Such isomorphisms exist for Galois groups of p-adic fields, but this did not seem to enter the discussion in
+5There is one notable more interesting case related to the monoid of divisors on tempered coverings of X at
+places of bad reduction, by means of which Mochizuki encodes the -function.
+6  PETER SCHOLZE AND JAKOB STIX
+that commute with this injection: The automorphisms of the latter are just Z×, and except
+for ±1, these do not respect the subset k¯× along the above inclusion6. Thus, in this case the
+assertion is only true up to sign, but for example if kv is a nonarchimedean localization, it
+becomes true if one replaces k¯× by
+This modification is often made in the IUTT papers.
+We note that the monoid o×k¯v does not have this rigidity property: In this case, the pair
+(1(X) ok×¯v ) admits extra automorphisms given by the action of Z× on ok×¯v . This is the
+"non-rigidity of the unit group portion".
+Thus, up to equivalence of categories, the "Frobenius-like picture" is often equivalent to a
+category of certain hyperbolic curves, cf. e.g. [IUTT-1, Corollary 5.3, Corollary 6.12 (i)], but not
+In any case, a (±ellN F -)Hodge theater is a certain amount of data that abstractly comes
+from the fixed once-punctured elliptic curve X. The natural functor from the category whose
+only object is X and whose morphisms are the automorphisms of X (which has one object with
+two automorphisms, the `identity' and `negation') to the category of ±ellN F -Hodge theaters is
+an equivalence of categories, as follows by combining [IUTT-1, Corollary 6.12 (i), Proposition 6.6
+(iii), Corollary 5.6 (ii), Proposition 4.8 (ii), Definition 6.13]. In other words, up to equivalence
+of categories, choosing a Hodge theater is equivalent to choosing a once-punctured elliptic curve
+abstractly isomorphic to X, and this equivalence of categories is constructive in the sense that one
+can give an explicit functor that takes a Hodge theater and produces a once-punctured elliptic
+curve. Of course, the category of elliptic curves abstractly isomorphic to X (and isomorphisms
+of curves) is equivalent to the category whose only object is X that we started with.
+2.1.3. log-links. The log-link introduced in [IUTT-3] is based on the following construction for
+an algebraic closure K of a nonarchimedean local field of characteristic 0, cf. [IUTT-3, Definition
+1.1 (i)]. The logarithm map defines a well-defined surjective7 map
+that turns multiplication into addition. The kernel of the map is given by the roots of unity
+(Q/Z)(1) = oKµ  o×K , and thus defining oK×µ := o×K /oKµ , the logarithm induces a bijection
+Using this observation, Mochizuki defines an endofunctor log on the category of topological fields
+isomorphic to algebraic closures of nonarchimedean local fields as follows. For any such field K,
+the underlying topological space of the new topological field log(K) will be oK×µ. The addition
+on log(K) is given by the multiplication on o×Kµ, and the multiplication on log(K) is defined via
+transport of structure along the bijection
+log : log(K) = o×Kµ - K.
+It follows that the endofunctor log is naturally equivalent to the identity, with the natural
+equivalence to the identity given by log : log(K) = K.
+The links in IUTT are all of the following form. Given two Hodge theaters HT1 and HT2,
+one extracts certain coarse data of the same categorical type on both sides, and then chooses
+an isomorphism between them. In the case of the log-link, the data is essentially that of 1(X)
+acting on kv (for v ranging over the finite places; there is some similar story at the archimedean
+6In fact, any   Z^× that respects k¯× must also respect k× = k¯×   lim-n k×/(k×)n sitting via Kummer theory
+inside -limU1(X) H1(U, Z(1)). But k× is the direct sum of a finite torsion group with a free abelian group of
+countable rank, hence multiplication by  must preserve Z inside Z^. This shows that necessarily  = ±1.
+7Note that K is algebraically closed and thus the image of log is divisible rather than contained in the
+Why abc is still a conjecture                              7
+places that we will ignore). Letting i Ki denoting these pairs deduced from HTi for i = 1, 2,
+the log-link consists of an isomorphism 1 = 2 and an isomorphism
+of topological monoids that is equivariant for the 1 = 2-actions.8
+2.1.4. Global realified Frobenioids. Mochizuki introduces the difficult notion of a Frobenioid in
+his papers [Frd1], [Frd2]. However, the notion of a global realified Frobenioid is very elemen-
+tary, cf. [IUTT-1, Example 3.5]. In this case, it simply amounts to a collection of ordered
+1-dimensional R-vector spaces Rv parametrized by the places v of k, together with a subspace
+of codimension 1 such that there is an ordered isomorphism Rv = R under which D0 is the
+given by sending 1 to log(N (v)) at finite places, and 2 at infinite places.
+In other words, one can define another ordered 1-dimensional R-vector space
+and then the natural maps Rv  R are ordered isomorphisms for all v. These considerations
+show that the category of global realified Frobenioids is equivalent to the category of ordered
+1-dimensional R-vector spaces. Moreover, if one fixes isomorphisms Rv = R as above and defines
+v  Rv as the preimage of 1, then the image of v/log(N (v)) under the map Rv  R (resp.
+the image of v/2 for infinite places v) is an element
+independent of v (but depending on the trivialization; cf. however the discussion of F ×µ-prime
+strips, where this trivialization is canonical).
+2.1.5. F ×µ-prime strips. Another kind of coarse data that can be extracted from Hodge
+theaters is the data of a F ×µ-prime strip, cf. [IUTT-2, Definition 4.9]. In general, prime
+strips denote data that is parametrized by all places of the number field k. In the case of a
+F ×µ-prime strip, this data is, at nonarchimedean places, given by the pair
+where ok¯v N with trivial Gv = Galkv -action.9 There is additional global data in the form of
+a global realified Frobenioid. At each finite place, one defines Rv as the 1-dimensional R-vector
+space with basis element v given by the generator of ok¯V , and one defines D0  v Rv as the
+usual divisors of arithmetic degree 0. In other words, the forgetful functor from F ×µ-prime
+strips to global realified Frobenioids factors over the category of trivialized global realified Frobe-
+nioids, and the category of F ×µ-prime strips is equivalent to the product of the categories of
+8Technically, Mochizuki does not choose any such isomorphism, but works with what he calls the full
+poly-isomorphism, i.e. the set of all such isomorphisms. Although we spent a lot of time discussing the ne-
+cessity of introducing full poly-isomorphisms over choosing one such isomorphism, Mochizuki was not able to
+explain this convincingly in our opinion. On a related note, if one remembers that all Hodge theaters really come
+from our fixed curve X, there is a completely natural isomorphism 1 = 2 given by 1 = 1(X) = 2 and
+K1 = K2 as K1 = k¯ = K2, and thus a natural 1 = 2-equivariant isomorphism log(K1) = K1 = K2 (and thus
+the same on o ). Choosing these "obvious" isomorphisms did not result in any problem that would be solved by
+allowing some other (possibly indeterminate) isomorphism.
+9There is some extra structure called a ×µ-Kummer structure on ok×¯vµ, given as the images of (o×k¯v )H  o×k¯vµ
+for all open subgroups H of Gv. As this plays no role for us, we will ignore it.
+8                                          PETER SCHOLZE AND JAKOB STIX
+pairs of topological groups acting on topological monoids abstractly isomorphic to Gv o×k¯vµ ×N,
+over all places v (where one has to modify this at archimedean places).
+2.1.6. Abstract pilot objects. Pilot objects occur in [IUTT-3, Definition 3.8]. They essentially
+consist of generators of the ok¯v -portions of a F ×µ-prime strip. One can define a "pilot element"
+as the image of (v(q )v)v                  v Rv (where we declare this entry to be 0 outside the places
+of bad reduction) under the projection to R = ( v Rv)/D0 associated to the global realified
+Frobenioid of the F ×µ-prime strip. Recall R is actually canonically trivialized by the
+normalization that maps can to 1. Under this normalization, the pilot element becomes
+pilot  2l deg(qE)  R.
+In many definitions below, the interesting things happen at the bad places, and we will only
+discuss this part in detail.
+2.1.7. Concrete q-pilot object. On the other hand, Mochizuki defines certain concrete10 pilot
+objects: A q-pilot object and a -pilot object. These are only defined internally within a Hodge
+theater.  The    concrete   q-pilot     object     is  the  collection        of     q      ok¯v  at  bad  places  (and  certain
+placeholder elements at other places). This is encoded in the F ×µ-prime strip Fq ×µ given
+Gv     o×k¯vµ  ×  qN.
+Note  that  the  q,   when  regarded       as  actual      elements      of  ok¯v ,  naturally    define   an  Arakelov  divisor,
+whose Arakelov degree agrees with the number given by the abstract pilot of Fq ×µ when one
+chooses the natural isomorphism R ,q = R.
+2.1.8. Concrete -pilot object. The concrete -pilot object is the collection of
+for j = 1, . . . , (at bad places). Up to some 2 -th roots of unity, these arise naturally as the
+values of a -function at certain 2 -torsion points, and Mochizuki devises an ingenious algorithm
+to recover this data very directly from the data of 1(X) acting on a certain monoid of divisors
+on tempered coverings of X.11
+The (j-th) concrete -pilot object defines a natural Arakelov divisor whose Arakelov degree
+equals j2 times the Arakelov degree of the q-pilot object.
+On the other hand, one can form a F ×µ-prime strip F ×µ given by the pair
+Gv      o×k¯vµ  ×    ((qj2   )j  =1,...,  )N
+that  is  generated   by  ok×¯vµ  and  (a  formal  symbol)      (qj2    )j  =1,...,  ; these are all abstractly isomorphic
+to the standard F ×µ-prime strip. In particular, the associated abstract pilot object (still
+called the -pilot object by Mochizuki) is an element of R , that encodes the arithmetic
+degree of the j-th concrete -pilot object only when the identification R , = R is scaled by
+j2; the necessity of this scaling is critical and will play a key role below.
+10The emphasis on abstract vs. concrete pilot objects is ours; Mochizuki does not properly distinguish them,
+which is part of our main concern.
+11There is an issue here that this is not one object but many. This can be resolved in a number of ways,
+e.g. by passing to a "diagonal" copy; or more concretely by forming averages when one extracts numbers such as
+Why abc is still a conjecture                                              9
+2.1.9. -link. The -link between two Hodge theaters HT1 and HT2 is the (full poly-)isomorph-
+ism between the F ×µ-prime strip F,1×µ constructed from the -pilot object in HT1 and
+the F ×µ-prime strip Fq,2 ×µ constructed from the q-pilot object in HT2. In particular, the
+choice of such an isomorphism identifies the corresponding abstract pilot objects. However, the
+-link  forgets  about  the  concrete  embeddings  of  q    into  ok¯v  and  v    (qj2  )j  =1,...,  into ok¯v .
+v                           v
+The attentive reader will realize that there is in fact a canonical choice for the -link: The
+F ×µ-prime strips are given by data of the form Gv o×k¯vµ × N on both sides (at finite places),
+and this data is canonically the same on both sides. It is simply the name of the generator of
+the monoid N that appears that is called  respectively q.
+2.2. Proof of [IUTT-3, Corollary 3.12]. Now let us try to unravel what happens in the critical
+step in the series of papers, namely towards the end of Step (xi) in the proof of [IUTT-3,
+Corollary 3.12]: "If one interprets the above discussion in terms of the notation introduced in
+the statement of Corollary 3.12, then one concludes [...] that -| log(q)|  -| log()|  R."
+An extremely rough outline of what happens in this step is the following. One considers two
+Hodge theaters HT1 and HT2 linked by a -link, so in particular the abstract -pilot object
+from HT1 is mapped to the abstract q-pilot object belonging to HT2. As we indicated earlier,
+there is no clear distinction between abstract and concrete pilot objects in Mochizuki's work,
+so it is argued in [IUTT-3, Corollary 3.12] that the multiradial algorithm [IUTT-3, Theorem
+3.11]12 implies that up to certain indeterminacies, e.g. (Ind 1,2,3) (without which the conclusion
+would be obviously false), this becomes an identification of concrete -pilot objects and concrete
+q-pilot objects (encoded via their action on processions of tensor packets of log-shells), and then
+the inequality follows directly.
+As we are interested in comparing real numbers, and we have seen that various copies of
+ordered 1-dimensional R-vector spaces arise, it is critical to spell out all identifications of copies
+of real numbers that are in place. In particular, in order to say that the abstract -pilot
+object encodes the arithmetic degree of the (j-th) concrete -pilot object, we saw that it was
+necessary to change the isomorphism R = R , by the scalar j2, j = 1, . . . , (or their average,
+if one is interested in the averaged degree). Trying to unravel exactly what is going on, we
+were drawing the following diagram in Kyoto. There are several ordered 1-dimensional R-vector
+(1) The ones R ,, R ,q where the pilot elements pilot of the abstract pilot objects live.
+(2) The ones R c,j , j = 1, . . . , , and R c,q where the pilot elements pilot of the concrete
+pilot objects live (of which there really are many in the case of ).
+(3) The standard real numbers R where arithmetic degrees live. For clarity, we take two
+copies of them R and Rq, one for each Hodge theater.
+In order for a meaningful inequality to be concluded, one must consistently identify all of
+these. For this purpose, we were drawing the following diagram (the left half arises from HT1,
+12We pause to observe that with the simplifications outlined above, such as identifying identical copies of
+objects along the identity, the critical [IUTT-3, Theorem 3.11] does not become false, but trivial.
+10                        PETER SCHOLZE AND JAKOB STIX
+the -side, and the right half arises from HT2, the q-side):
+R ,  -link                         / R ,q
+x                                                "
+(R c,j )j=1,...,                                                    R c,q
+&                                          |
+=                             / Rq
+There is one consistent choice of isomorphisms given by using the natural isomorphisms R , =
+R ,q = R coming from the observation that the global realified Frobenioids coming from F ×µ-
+prime strips are always canonically trivial using the various can. However, we saw that with
+these isomorphisms, the abstract -pilot object does not encode the arithmetic degree of the
+-divisor. Thus, Mochizuki wanted to introduce scalars of j2 somewhere on the left part of this
+diagram (which strictly speaking leads to inconsistencies, i.e. monodromy, on the left part of the
+diagram alone, which arguably can be overcome by using averages). However, it is clear that
+this will result in the whole diagram having monodromy j2, i.e., being inconsistent.
+The conclusion of this discussion is that with consistent identifications of copies of real num-
+bers, one must in (1.5) omit the scalars j2 that appear, which leads to an empty inequality.
+We voiced these concerns in this form at the end of the fourth day of discussions. On the
+fifth and final day, Mochizuki tried to explain to us why this is not a problem after all. In
+particular, he claimed that up to the "blurring" given by certain indeterminacies the diagram
+does commute; it seems to us that this statement means that the blurring must be by a factor
+of at least O( 2) rendering the inequality thus obtained useless.

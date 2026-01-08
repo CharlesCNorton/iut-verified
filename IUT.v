@@ -390,3 +390,13 @@ Proof.
 Qed.
 
 End Inconsistency.
+
+Theorem iut_core_tension (R : numDomainType) (ell : nat)
+  (ell_ge_2 : (2 <= ell)%N) (R_char_gt_3 : (3%:R : R) != 0) :
+  forall f : 'I_ell -> R,
+    jsquared_scalars f -> (1 < ell)%N -> ~ uniform_scalars f.
+Proof.
+  move=> f Hj H1 Hu.
+  apply: (no_agreement R_char_gt_3 (f:=f) H1).
+  by split.
+Qed.
