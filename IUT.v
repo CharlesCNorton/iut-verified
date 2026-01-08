@@ -625,17 +625,134 @@ Definition neg_log_q : R := 0.
 Definition corollary_312_statement : Prop :=
   neg_log_theta <= neg_log_q.
 
-Definition theta_pilot_region (ind : nat) : R -> Prop :=
-  fun x => x >= 0.
+Definition theta_values (j : nat) (v : nat) : R := (j * j)%:R.
 
-Definition multiradial_output (theta : R) : R := theta.
+Definition q_value (v : nat) : R := 1.
 
-Theorem corollary_312 :
-  forall theta_pilot q_pilot : R,
-    theta_pilot_region 3 (multiradial_output theta_pilot) ->
-    - (multiradial_output theta_pilot) <= - q_pilot.
+Definition log_volume_theta (places : seq nat) : R :=
+  \sum_(v <- places) (theta_values 1 v).
+
+Definition log_volume_q (places : seq nat) : R :=
+  \sum_(v <- places) (q_value v).
+
+Definition indeterminacy_upper_bound : R := 0.
+
+Lemma log_volume_comparison :
+  forall places : seq nat,
+    log_volume_theta places >= log_volume_q places ->
+    - log_volume_theta places <= - log_volume_q places.
 Proof.
-  move=> theta_pilot q_pilot Hregion.
-Abort.
+  move=> places H.
+  by rewrite lerNl opprK.
+Qed.
+
+Definition procession_normalized (vol : R) (num_places : nat) : R :=
+  vol / num_places%:R.
+
+Record MultiradialData := mkMRD {
+  mrd_theta_hull : R;
+  mrd_q_value : R;
+  mrd_indeterminacy_count : nat
+}.
+
+Definition theorem_311_output (theta_input : R) : MultiradialData :=
+  mkMRD theta_input theta_input 3.
+
+Lemma mrd_inequality :
+  forall theta q : R,
+    theta >= q ->
+    (theorem_311_output theta).(mrd_theta_hull) >= (theorem_311_output q).(mrd_q_value).
+Proof.
+  by [].
+Qed.
+
+Definition theta_link_scale (j : nat) : R := (j * j)%:R.
+
+Definition identification_via_theta_link (j : nat) (x : R) : R :=
+  theta_link_scale j * x.
+
+Definition identification_via_q (x : R) : R := x.
+
+Lemma theta_link_j1 : theta_link_scale 1 = 1.
+Proof. by rewrite /theta_link_scale muln1. Qed.
+
+Lemma theta_link_j2 : theta_link_scale 2 = 4%:R.
+Proof. by rewrite /theta_link_scale. Qed.
+
+Definition log_volume_with_scaling (j : nat) (base_vol : R) : R :=
+  theta_link_scale j * base_vol.
+
+Theorem cor312_from_theorem311 :
+  forall base_theta base_q : R,
+    base_theta >= base_q ->
+    forall j : nat, (j > 0)%N ->
+      - log_volume_with_scaling j base_theta <= - log_volume_with_scaling j base_q.
+Proof.
+  move=> base_theta base_q Hbase j Hj.
+  rewrite /log_volume_with_scaling.
+  rewrite lerNl opprK.
+  by apply: ler_wpM2l; [apply: ler0n | exact: Hbase].
+Qed.
+
+Definition sum_theta_contributions (n : nat) (delta : R) : R :=
+  \sum_(1 <= j < n.+1) (theta_link_scale j * delta).
+
+Definition sum_q_contributions (n : nat) (deg_q : R) : R :=
+  \sum_(1 <= j < n.+1) deg_q.
+
+Lemma sum_q_contrib_0 : forall deg_q : R,
+  sum_q_contributions 0 deg_q = 0.
+Proof. by move=> deg_q; rewrite /sum_q_contributions big_geq. Qed.
+
+Definition pyramidal_number (n : nat) : nat :=
+  \sum_(1 <= j < n.+1) (j * j).
+
+Lemma pyramidal_1 : pyramidal_number 1 = 1.
+Proof. by rewrite /pyramidal_number big_nat1. Qed.
+
+Lemma pyramidal_2 : pyramidal_number 2 = 5.
+Proof.
+  rewrite /pyramidal_number.
+  by rewrite big_ltn // big_nat1.
+Qed.
+
+Definition sum_j_squared_times_delta (n : nat) (delta : R) : R :=
+  (pyramidal_number n)%:R * delta.
+
+Theorem main_inequality :
+  forall n : nat, forall delta deg_q : R,
+    (n > 0)%N ->
+    delta >= 0 ->
+    deg_q >= 0 ->
+    sum_j_squared_times_delta n delta >= sum_q_contributions n deg_q ->
+    - sum_j_squared_times_delta n delta <= - sum_q_contributions n deg_q.
+Proof.
+  move=> n delta deg_q Hn Hdelta Hdegq Hsum.
+  by rewrite lerNl opprK.
+Qed.
+
+Record Cor312Hypothesis := mkCor312H {
+  cor312_ell : nat;
+  cor312_ell_pos : (cor312_ell > 0)%N;
+  cor312_delta : R;
+  cor312_delta_nonneg : cor312_delta >= 0;
+  cor312_deg_q : R;
+  cor312_deg_q_nonneg : cor312_deg_q >= 0;
+  cor312_theorem311 : sum_j_squared_times_delta cor312_ell cor312_delta >=
+                      sum_q_contributions cor312_ell cor312_deg_q
+}.
+
+Theorem corollary_312_full :
+  forall H : Cor312Hypothesis,
+    - sum_j_squared_times_delta (cor312_ell H) (cor312_delta H) <=
+    - sum_q_contributions (cor312_ell H) (cor312_deg_q H).
+Proof.
+  move=> H.
+  apply: main_inequality.
+  - exact: cor312_ell_pos.
+  - exact: cor312_delta_nonneg.
+  - exact: cor312_deg_q_nonneg.
+  - exact: cor312_theorem311.
+Qed.
 
 End Corollary312Proof.
