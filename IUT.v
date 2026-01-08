@@ -170,3 +170,47 @@ Definition cor312_ineq : Prop :=
   - log_vol_theta <= - log_vol_q.
 
 End LogVolume.
+
+Section InequalityAnalysis.
+
+Variable R : numDomainType.
+Variable ell : nat.
+Hypothesis ell_pos : (0 < ell)%N.
+
+Variable delta : R.
+Variable deg_q : R.
+
+Definition sum_of_squares (n : nat) : nat :=
+  \sum_(1 <= j < n.+1) (j * j).
+
+Definition sum_linear (n : nat) : nat :=
+  \sum_(1 <= j < n.+1) j.
+
+Definition jsq_scaled_bound (n : nat) (d dq : R) : R :=
+  (sum_of_squares n)%:R * d - dq.
+
+Definition uniform_scaled_bound (n : nat) (d dq : R) : R :=
+  n%:R * d - dq.
+
+Definition bound_is_useful (bound : R) : Prop :=
+  exists c : R, c > 0 /\ bound >= c.
+
+Definition bound_is_vacuous (bound : R) (d : R) : Prop :=
+  bound <= 0 /\ d >= 0.
+
+Lemma sum_of_squares_1 : sum_of_squares 1 = 1.
+Proof. by rewrite /sum_of_squares big_nat1. Qed.
+
+Lemma sum_of_squares_2 : sum_of_squares 2 = 5.
+Proof. by rewrite /sum_of_squares big_ltn // big_nat1. Qed.
+
+Lemma sum_linear_1 : sum_linear 1 = 1.
+Proof. by rewrite /sum_linear big_nat1. Qed.
+
+Lemma sum_linear_2 : sum_linear 2 = 3.
+Proof. by rewrite /sum_linear big_ltn // big_nat1. Qed.
+
+Lemma squares_gt_linear_at_2 : (sum_of_squares 2 > sum_linear 2)%N.
+Proof. by rewrite sum_of_squares_2 sum_linear_2. Qed.
+
+End InequalityAnalysis.
