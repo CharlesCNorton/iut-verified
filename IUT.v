@@ -625,4 +625,17 @@ Definition neg_log_q : R := 0.
 Definition corollary_312_statement : Prop :=
   neg_log_theta <= neg_log_q.
 
+Definition theta_pilot_region (ind : nat) : R -> Prop :=
+  fun x => x >= 0.
+
+Definition multiradial_output (theta : R) : R := theta.
+
+Theorem corollary_312 :
+  forall theta_pilot q_pilot : R,
+    theta_pilot_region 3 (multiradial_output theta_pilot) ->
+    - (multiradial_output theta_pilot) <= - q_pilot.
+Proof.
+  move=> theta_pilot q_pilot Hregion.
+Abort.
+
 End Corollary312Proof.
