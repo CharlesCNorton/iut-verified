@@ -587,6 +587,25 @@ Definition commutes_and_uniform_implies (D : SchStixDiagram) : Prop :=
   diagram_has_uniform_scaling D ->
   forall j : 'I_ell, path_arithmetic D j = 1.
 
+Definition tate_and_uniform_incompatible (D : SchStixDiagram) (H1 : (1 < ell)%N) : Prop :=
+  diagram_has_tate_scaling D ->
+  diagram_has_uniform_scaling D ->
+  False.
+
+Lemma tate_uniform_contradiction (D : SchStixDiagram) (H1 : (1 < ell)%N) :
+  tate_and_uniform_incompatible D H1.
+Proof. Admitted.
+
+Definition core_question (D : SchStixDiagram) : Prop :=
+  diagram_commutes D ->
+  (diagram_has_tate_scaling D \/ diagram_has_uniform_scaling D).
+
+Definition mochizuki_diagram_claim (D : SchStixDiagram) : Prop :=
+  diagram_commutes D /\ diagram_has_tate_scaling D.
+
+Definition scholze_stix_diagram_claim (D : SchStixDiagram) : Prop :=
+  diagram_commutes D -> diagram_has_uniform_scaling D.
+
 End DiagramAnalysis.
 
 Section TateCurve.
