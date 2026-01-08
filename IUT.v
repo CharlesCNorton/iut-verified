@@ -214,3 +214,28 @@ Lemma squares_gt_linear_at_2 : (sum_of_squares 2 > sum_linear 2)%N.
 Proof. by rewrite sum_of_squares_2 sum_linear_2. Qed.
 
 End InequalityAnalysis.
+
+Section Resolution.
+
+Variable R : numDomainType.
+Variable ell : nat.
+Hypothesis ell_ge_2 : (2 <= ell)%N.
+
+Variable theta_to_abstract_scalar : 'I_ell -> R.
+
+Definition scalars_are_jsquared : Prop :=
+  forall j : 'I_ell, theta_to_abstract_scalar j = ((nat_of_ord j).+1 * (nat_of_ord j).+1)%:R.
+
+Definition scalars_are_uniform : Prop :=
+  forall j : 'I_ell, theta_to_abstract_scalar j = 1.
+
+Definition scalars_vary : Prop :=
+  exists j1 j2 : 'I_ell, theta_to_abstract_scalar j1 <> theta_to_abstract_scalar j2.
+
+Lemma four_gt_one : (4 > 1)%N.
+Proof. by []. Qed.
+
+Lemma jsq_at_2_is_4 : (2 * 2 = 4)%N.
+Proof. by []. Qed.
+
+End Resolution.
