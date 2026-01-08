@@ -912,4 +912,27 @@ Proof. by rewrite /blur_to_commute muln1 subrr. Qed.
 Lemma jsq_ge_4 : forall j : nat, (j > 1)%N -> (j * j >= 4)%N.
 Proof. move=> j Hj. by rewrite -[4%N]/(2*2)%N leq_mul. Qed.
 
+Lemma blur_gt0 : forall j : nat, (j > 1)%N -> blur_to_commute j > 0.
+Proof.
+  move=> j Hj.
+  rewrite /blur_to_commute subr_gt0 -[1]/(1%:R) ltr_nat.
+  have H4 := jsq_ge_4 Hj.
+  by apply: leq_trans H4.
+Qed.
+
+Definition total_blur (n : nat) : R := \sum_(2 <= j < n.+1) blur_to_commute j.
+
+Lemma total_blur_1 : total_blur 1 = 0.
+Proof. by rewrite /total_blur big_geq. Qed.
+
+Lemma total_blur_2 : total_blur 2 = blur_to_commute 2.
+Proof. by rewrite /total_blur big_nat1. Qed.
+
+Lemma total_blur_2_gt0 : total_blur 2 > 0.
+Proof. rewrite total_blur_2. exact: blur_gt0. Qed.
+
+Definition iut_blur_small (blur : R) : Prop := blur < 1.
+
+Definition blur_covers_j (j : nat) (blur : R) : Prop := blur >= blur_to_commute j.
+
 End IndeterminacyBlur.
