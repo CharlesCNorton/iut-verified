@@ -322,4 +322,34 @@ Lemma tate_scalar_at_1 (H : (1 < ell)%N) :
   tate_derived_scalar (Ordinal H) = 4%:R.
 Proof. by rewrite /tate_derived_scalar /=. Qed.
 
+Definition tate_scalars_match_jsquared :
+  forall j : 'I_ell, tate_derived_scalar j = ((nat_of_ord j).+1 * (nat_of_ord j).+1)%:R.
+Proof. by move=> j; rewrite /tate_derived_scalar. Qed.
+
 End Connection.
+
+Section Inconsistency.
+
+Variable R : numDomainType.
+Variable ell : nat.
+Hypothesis ell_ge_2 : (2 <= ell)%N.
+
+Definition uniform_scalars (f : 'I_ell -> R) : Prop :=
+  forall j : 'I_ell, f j = 1.
+
+Definition jsquared_scalars (f : 'I_ell -> R) : Prop :=
+  forall j : 'I_ell, f j = ((nat_of_ord j).+1 * (nat_of_ord j).+1)%:R.
+
+Lemma uniform_implies_all_one (f : 'I_ell -> R) (H0 : (0 < ell)%N) :
+  uniform_scalars f -> f (Ordinal H0) = 1.
+Proof. by move=> Hu; apply: Hu. Qed.
+
+Lemma jsquared_at_0 (f : 'I_ell -> R) (H0 : (0 < ell)%N) :
+  jsquared_scalars f -> f (Ordinal H0) = 1.
+Proof. by move=> Hj; rewrite Hj /= muln1. Qed.
+
+Lemma jsquared_at_1 (f : 'I_ell -> R) (H1 : (1 < ell)%N) :
+  jsquared_scalars f -> f (Ordinal H1) = 4%:R.
+Proof. by move=> Hj; rewrite Hj /=. Qed.
+
+End Inconsistency.
