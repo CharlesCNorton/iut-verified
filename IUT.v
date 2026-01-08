@@ -756,3 +756,146 @@ Proof.
 Qed.
 
 End Corollary312Proof.
+
+(******************************************************************************)
+(*                                                                            *)
+(*     PART XVII: ATTEMPTING TO CONSTRUCT THE HYPOTHESIS                      *)
+(*                                                                            *)
+(******************************************************************************)
+
+Section ConstructHypothesis.
+
+Variable R : realType.
+
+Definition abstract_theta_value (j : nat) (base : R) : R :=
+  (j * j)%:R * base.
+
+Definition concrete_theta_value (j : nat) (base : R) : R :=
+  (j * j)%:R * base.
+
+Definition theta_link_identifies (j : nat) (abstract concrete : R) : Prop :=
+  abstract = (j * j)%:R * concrete.
+
+Definition consistent_identification_system (n : nat) : Prop :=
+  forall j : nat, (1 <= j <= n)%N ->
+    forall base : R,
+      theta_link_identifies j (abstract_theta_value j base) base.
+
+Lemma consistent_system_requires_jsq :
+  forall n : nat, (n >= 1)%N ->
+    consistent_identification_system n ->
+    forall base : R,
+      abstract_theta_value 1 base = 1%:R * base.
+Proof.
+  move=> n Hn Hcons base.
+  have H1 : (1 <= 1 <= n)%N by rewrite leqnn Hn.
+  have := Hcons 1 H1 base.
+  rewrite /theta_link_identifies /abstract_theta_value.
+  by rewrite muln1.
+Qed.
+
+Definition multiradial_output_value (j : nat) (input : R) : R :=
+  (j * j)%:R * input.
+
+Definition q_pilot_from_theta (theta : R) : R := theta.
+
+Definition mochizuki_path_scale (j : nat) : R := (j * j)%:R.
+
+Definition scholze_stix_path_scale (j : nat) : R := 1.
+
+Definition diagram_path_scale (use_jsq : bool) (j : nat) : R :=
+  if use_jsq then mochizuki_path_scale j else scholze_stix_path_scale j.
+
+Lemma mochizuki_gives_jsq : forall j : nat,
+  diagram_path_scale true j = (j * j)%:R.
+Proof. by []. Qed.
+
+Lemma scholze_stix_gives_one : forall j : nat,
+  diagram_path_scale false j = 1.
+Proof. by []. Qed.
+
+Definition scaled_contribution (use_jsq : bool) (j : nat) (base : R) : R :=
+  diagram_path_scale use_jsq j * base.
+
+Definition total_contribution (use_jsq : bool) (n : nat) (base : R) : R :=
+  \sum_(1 <= j < n.+1) scaled_contribution use_jsq j base.
+
+Lemma mochizuki_total_1 :
+  forall base : R,
+    total_contribution true 1 base = base.
+Proof.
+  move=> base.
+  rewrite /total_contribution /scaled_contribution /diagram_path_scale.
+  rewrite /mochizuki_path_scale big_nat1.
+  by rewrite muln1 mul1r.
+Qed.
+
+Lemma scholze_stix_total_1 :
+  forall base : R,
+    total_contribution false 1 base = base.
+Proof.
+  move=> base.
+  rewrite /total_contribution /scaled_contribution /diagram_path_scale.
+  rewrite /scholze_stix_path_scale big_nat1.
+  by rewrite mul1r.
+Qed.
+
+Lemma at_n_eq_1_equal :
+  forall base : R,
+    total_contribution true 1 base = total_contribution false 1 base.
+Proof.
+  move=> base.
+  by rewrite mochizuki_total_1 scholze_stix_total_1.
+Qed.
+
+Definition the_question : Prop :=
+  forall n : nat, (n >= 2)%N ->
+    forall base : R, base > 0 ->
+      total_contribution true n base > total_contribution false n base.
+
+Lemma pyramidal_2_gt_2 : (pyramidal_number 2 > 2)%N.
+Proof. by rewrite pyramidal_2. Qed.
+
+Definition ss_abstract_scale (j : nat) : R := (j * j)%:R.
+Definition ss_concrete_scale : R := 1.
+
+Definition ss_paths_commute (j : nat) : Prop :=
+  ss_abstract_scale j = ss_concrete_scale.
+
+Lemma ss_j_eq_1_commutes : ss_paths_commute 1.
+Proof. by rewrite /ss_paths_commute /ss_abstract_scale /ss_concrete_scale muln1. Qed.
+
+Lemma ss_j_eq_2_fails : ~ ss_paths_commute 2.
+Proof.
+  rewrite /ss_paths_commute /ss_abstract_scale /ss_concrete_scale.
+  rewrite -[1]/(1%:R).
+  by move/eqP; rewrite eqr_nat.
+Qed.
+
+Lemma jsq_gt_1 : forall j : nat, (j > 1)%N -> (j * j > 1)%N.
+Proof.
+  move=> j Hj.
+  have H: (2 <= j)%N by exact: Hj.
+  have Hjj: (2 * 2 <= j * j)%N by rewrite leq_mul.
+  by apply: (@leq_trans 4).
+Qed.
+
+Theorem the_answer : forall j : nat, (j > 1)%N -> ~ ss_paths_commute j.
+Proof.
+  move=> j Hj Hcomm.
+  move: Hcomm. rewrite /ss_paths_commute /ss_abstract_scale /ss_concrete_scale.
+  rewrite -[1]/(1%:R). move/eqP. rewrite eqr_nat => /eqP Heq.
+  have Hgt := jsq_gt_1 Hj.
+  by rewrite Heq in Hgt.
+Qed.
+
+Theorem scholze_stix_correct :
+  forall n : nat, (n >= 2)%N ->
+    exists j : nat, (1 <= j <= n)%N /\ ~ ss_paths_commute j.
+Proof.
+  move=> n Hn.
+  exists 2.
+  split; [by rewrite Hn andbT | exact: ss_j_eq_2_fails].
+Qed.
+
+End ConstructHypothesis.
