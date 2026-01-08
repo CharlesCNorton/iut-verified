@@ -909,4 +909,7 @@ Definition blur_to_commute (j : nat) : R := (j * j)%:R - 1.
 Lemma blur_j1 : blur_to_commute 1 = 0.
 Proof. by rewrite /blur_to_commute muln1 subrr. Qed.
 
+Lemma jsq_ge_4 : forall j : nat, (j > 1)%N -> (j * j >= 4)%N.
+Proof. move=> j Hj. by rewrite -[4%N]/(2*2)%N leq_mul. Qed.
+
 End IndeterminacyBlur.
