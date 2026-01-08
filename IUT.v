@@ -899,3 +899,14 @@ Proof.
 Qed.
 
 End ConstructHypothesis.
+
+Section IndeterminacyBlur.
+
+Variable R : realType.
+
+Definition blur_to_commute (j : nat) : R := (j * j)%:R - 1.
+
+Lemma blur_j1 : blur_to_commute 1 = 0.
+Proof. by rewrite /blur_to_commute muln1 subrr. Qed.
+
+End IndeterminacyBlur.
