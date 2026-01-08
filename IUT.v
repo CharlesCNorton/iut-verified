@@ -460,6 +460,58 @@ Definition theorem_3_11
 
 End MultiradialAlgorithm.
 
+Section Corollary312.
+
+Variable R : numDomainType.
+Variable ell : nat.
+Hypothesis ell_pos : (0 < ell)%N.
+
+Definition log_vol_theta_pilot
+  (ind : FullIndeterminacy R ell)
+  (theta_vals : 'I_ell -> R) : R :=
+  \sum_(j < ell) theta_vals (Ordinal (ltn_ord j)).
+
+Definition log_vol_q_pilot (q_val : R) : R := q_val.
+
+Definition corollary_3_12_statement
+  (ind : FullIndeterminacy R ell)
+  (theta_vals : 'I_ell -> R)
+  (q_val : R) : Prop :=
+  - log_vol_theta_pilot ind theta_vals <= - log_vol_q_pilot q_val.
+
+Definition corollary_3_12_from_multiradial
+  (H1 H2 : HodgeTheater R ell)
+  (link : ThetaLink R ell)
+  (ind : FullIndeterminacy R ell) : Prop :=
+  theorem_3_11 H1 H2 link ind ->
+  corollary_3_12_statement ind (ht_theta_values H1) (ht_q_param H2).
+
+Definition concrete_theta_scaling (j : 'I_ell) : nat :=
+  (nat_of_ord j).+1 * (nat_of_ord j).+1.
+
+Definition abstract_theta_identification
+  (concrete : 'I_ell -> R) (abstract : 'I_ell -> R) (scale : 'I_ell -> R) : Prop :=
+  forall j, abstract j = scale j * concrete j.
+
+Definition mochizuki_scaling (j : 'I_ell) : R :=
+  (concrete_theta_scaling j)%:R.
+
+Definition uniform_scaling (j : 'I_ell) : R := 1.
+
+Definition scaling_choice_determines_inequality
+  (scale : 'I_ell -> R)
+  (concrete_theta : 'I_ell -> R)
+  (q_val : R) : R :=
+  \sum_(j < ell) scale (Ordinal (ltn_ord j)) * concrete_theta (Ordinal (ltn_ord j)) - q_val.
+
+Definition useful_inequality (bound : R) : Prop :=
+  bound > 0.
+
+Definition vacuous_inequality (bound : R) : Prop :=
+  bound <= 0.
+
+End Corollary312.
+
 Section TateCurve.
 
 Variable K : fieldType.
