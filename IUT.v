@@ -240,31 +240,225 @@ Proof. by []. Qed.
 
 End Resolution.
 
+Section Frobenioids.
+
+Variable R : ringType.
+
+Record DivisorMonoid := mkDM {
+  dm_carrier : Type;
+  dm_zero : dm_carrier;
+  dm_add : dm_carrier -> dm_carrier -> dm_carrier;
+  dm_assoc : forall a b c, dm_add a (dm_add b c) = dm_add (dm_add a b) c;
+  dm_unit_l : forall a, dm_add dm_zero a = a;
+  dm_unit_r : forall a, dm_add a dm_zero = a
+}.
+
+Record UnitGroup := mkUG {
+  ug_carrier : Type;
+  ug_one : ug_carrier;
+  ug_mul : ug_carrier -> ug_carrier -> ug_carrier;
+  ug_inv : ug_carrier -> ug_carrier;
+  ug_assoc : forall a b c, ug_mul a (ug_mul b c) = ug_mul (ug_mul a b) c;
+  ug_unit_l : forall a, ug_mul ug_one a = a;
+  ug_inv_l : forall a, ug_mul (ug_inv a) a = ug_one
+}.
+
+Record Frobenioid := mkFrob {
+  frob_divisors : DivisorMonoid;
+  frob_units : UnitGroup;
+  frob_degree : dm_carrier frob_divisors -> R;
+  frob_frobenius : nat -> dm_carrier frob_divisors -> dm_carrier frob_divisors;
+  frob_frob_degree : forall n d,
+    frob_degree (frob_frobenius n d) = n%:R * frob_degree d
+}.
+
+Definition frob_trivial_units (F : Frobenioid) : Prop :=
+  forall u : ug_carrier (frob_units F), u = ug_one (frob_units F).
+
+Definition frob_realified (F : Frobenioid) : Type :=
+  dm_carrier (frob_divisors F).
+
+End Frobenioids.
+
+Section PrimeStripDef.
+
+Variable R : numDomainType.
+Variable places : seq Place.
+
+Record FmuStrip := mkFmuStrip {
+  fmu_frob : Place -> Frobenioid R;
+  fmu_units_mod_torsion : Place -> Type;
+  fmu_global_degree : R
+}.
+
+Record FtimesStrip := mkFtimesStrip {
+  ftimes_frob : Place -> Frobenioid R;
+  ftimes_full_units : Place -> UnitGroup;
+  ftimes_global_degree : R
+}.
+
+Record FrealStrip := mkFrealStrip {
+  freal_values : Place -> R;
+  freal_sum : R
+}.
+
+Inductive PrimeStripVariant :=
+  | PS_Fmu : FmuStrip -> PrimeStripVariant
+  | PS_Ftimes : FtimesStrip -> PrimeStripVariant
+  | PS_Freal : FrealStrip -> PrimeStripVariant.
+
+End PrimeStripDef.
+
 Record PrimeStrip := mkPS {
-  ps_data : Type
+  ps_ring : numDomainType;
+  ps_places : seq Place;
+  ps_variant : PrimeStripVariant ps_ring
+}.
+
+Section HodgeTheaterDef.
+
+Variable R : numDomainType.
+Variable ell : nat.
+
+Record MonoThetaEnv := mkMTE {
+  mte_cyclotomic_rigidity : Type;
+  mte_theta_values : 'I_ell -> R;
+  mte_q_parameter : R
+}.
+
+Record EtalePortion := mkEtale {
+  etale_fund_group : Type;
+  etale_galois_action : Type
+}.
+
+Record FrobeniusPortion := mkFrob_portion {
+  frobp_prime_strip : PrimeStripVariant R;
+  frobp_monoid_action : Type
 }.
 
 Record HodgeTheater := mkHT {
   ht_label : nat;
-  ht_theta_strip : PrimeStrip;
-  ht_q_strip : PrimeStrip
+  ht_etale : EtalePortion;
+  ht_frobenius : FrobeniusPortion;
+  ht_mono_theta : MonoThetaEnv;
+  ht_theta_strip : PrimeStripVariant R;
+  ht_q_strip : PrimeStripVariant R;
+  ht_base_field : fieldType
 }.
+
+Definition ht_theta_values (H : HodgeTheater) : 'I_ell -> R :=
+  mte_theta_values (ht_mono_theta H).
+
+Definition ht_q_param (H : HodgeTheater) : R :=
+  mte_q_parameter (ht_mono_theta H).
 
 Record ThetaLink := mkTL {
   tl_domain : HodgeTheater;
   tl_codomain : HodgeTheater;
-  tl_strip_map : PrimeStrip -> PrimeStrip
+  tl_fmu_iso : PrimeStripVariant R -> PrimeStripVariant R;
+  tl_theta_to_q : Prop
 }.
 
 Definition tl_identifies_theta_with_q (link : ThetaLink) : Prop :=
-  tl_strip_map link (ht_theta_strip (tl_domain link)) =
+  tl_fmu_iso link (ht_theta_strip (tl_domain link)) =
   ht_q_strip (tl_codomain link).
+
+Record LogLink := mkLL {
+  ll_domain : HodgeTheater;
+  ll_codomain : HodgeTheater;
+  ll_log_map : R -> R;
+  ll_preserves_galois : Prop
+}.
 
 Record LogThetaLattice := mkLTL {
   ltl_theaters : int -> int -> HodgeTheater;
-  ltl_theta_links : int -> int -> ThetaLink;
-  ltl_log_links : int -> int -> PrimeStrip -> PrimeStrip
+  ltl_theta_links : int -> ThetaLink;
+  ltl_log_links : int -> int -> LogLink;
+  ltl_vertical_log : forall m n, ll_domain (ltl_log_links m n) = ltl_theaters m n;
+  ltl_horizontal_theta : forall n,
+    tl_domain (ltl_theta_links n) = ltl_theaters 0 n
 }.
+
+End HodgeTheaterDef.
+
+Section Indeterminacies.
+
+Variable R : numDomainType.
+Variable ell : nat.
+
+Record Ind1_UnitGroup := mkInd1 {
+  ind1_automorphisms : Type;
+  ind1_action_on_units : ind1_automorphisms -> R -> R;
+  ind1_preserves_structure : forall a x y,
+    ind1_action_on_units a (x * y) = ind1_action_on_units a x * ind1_action_on_units a y
+}.
+
+Record Ind2_Galois := mkInd2 {
+  ind2_kummer_isos : nat -> Type;
+  ind2_upper_semi_compat : forall m n, (m <= n)%N -> ind2_kummer_isos m -> ind2_kummer_isos n;
+  ind2_log_link_compat : Prop
+}.
+
+Record Ind3_Label := mkInd3 {
+  ind3_label_perms : Type;
+  ind3_F_ell_action : ind3_label_perms -> 'I_ell -> 'I_ell;
+  ind3_upper_semi_compat_nonarc : Prop;
+  ind3_surjective_arc : Prop
+}.
+
+Record FullIndeterminacy := mkFullInd {
+  full_ind1 : Ind1_UnitGroup;
+  full_ind2 : Ind2_Galois;
+  full_ind3 : Ind3_Label
+}.
+
+Definition indeterminacy_region (ind : FullIndeterminacy) (base : R) : R -> Prop :=
+  fun x => exists a : ind1_automorphisms (full_ind1 ind),
+    x = @ind1_action_on_units (full_ind1 ind) a base.
+
+Definition blurring_factor (ind : FullIndeterminacy) : R -> R := id.
+
+Definition indeterminacy_absorbs_jsquared
+  (ind : FullIndeterminacy) (j : 'I_ell) (scale : R) : Prop :=
+  forall base : R,
+    indeterminacy_region ind base (scale * base).
+
+Definition scholze_stix_bound (ind : FullIndeterminacy) : Prop :=
+  forall j : 'I_ell,
+    indeterminacy_absorbs_jsquared ind j ((nat_of_ord j).+1 * (nat_of_ord j).+1)%:R ->
+    exists c : R, c >= (ell * ell)%:R.
+
+End Indeterminacies.
+
+Section MultiradialAlgorithm.
+
+Variable R : numDomainType.
+Variable ell : nat.
+Hypothesis ell_pos : (0 < ell)%N.
+
+Definition theta_pilot_region
+  (ind : FullIndeterminacy R ell) (theta_vals : 'I_ell -> R) : ('I_ell -> R) -> Prop :=
+  fun f => forall j, @indeterminacy_region R ell ind (theta_vals j) (f j).
+
+Definition q_pilot_value (q : R) : R := q.
+
+Definition multiradial_output
+  (ind : FullIndeterminacy R ell)
+  (theta_vals : 'I_ell -> R)
+  (q : R) : Prop :=
+  exists f : 'I_ell -> R,
+    theta_pilot_region ind theta_vals f /\
+    forall j, f j <= q.
+
+Definition theorem_3_11
+  (H1 H2 : HodgeTheater R ell)
+  (link : ThetaLink R ell)
+  (ind : FullIndeterminacy R ell) : Prop :=
+  tl_domain link = H1 ->
+  tl_codomain link = H2 ->
+  multiradial_output ind (ht_theta_values H1) (ht_q_param H2).
+
+End MultiradialAlgorithm.
 
 Section TateCurve.
 
