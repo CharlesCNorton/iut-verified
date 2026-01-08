@@ -512,6 +512,83 @@ Definition vacuous_inequality (bound : R) : Prop :=
 
 End Corollary312.
 
+Section DiagramAnalysis.
+
+Variable R : numDomainType.
+Variable ell : nat.
+Hypothesis ell_pos : (0 < ell)%N.
+
+Record RCopyNode := mkRCN {
+  rcn_id : nat
+}.
+
+Record RIdentification := mkRI {
+  ri_source : RCopyNode;
+  ri_target : RCopyNode;
+  ri_scale : R
+}.
+
+Definition ri_compose (f g : RIdentification) (Hmatch : ri_target g = ri_source f) : RIdentification :=
+  mkRI (ri_source g) (ri_target f) (ri_scale f * ri_scale g).
+
+Definition ri_identity (n : RCopyNode) : RIdentification :=
+  mkRI n n 1.
+
+Record SchStixDiagram := mkSchStix {
+  node_R_theta_theta : RCopyNode;
+  node_R_theta_q : RCopyNode;
+  node_R_c_theta : 'I_ell -> RCopyNode;
+  node_R_c_q : RCopyNode;
+  node_R_arith_theta : RCopyNode;
+  node_R_arith_q : RCopyNode;
+
+  edge_theta_link : RIdentification;
+  edge_c_to_abs_theta : 'I_ell -> RIdentification;
+  edge_c_to_abs_q : RIdentification;
+  edge_c_to_arith_theta : 'I_ell -> RIdentification;
+  edge_c_to_arith_q : RIdentification;
+  edge_arith_eq : RIdentification
+}.
+
+Definition path_abstract (D : SchStixDiagram) (j : 'I_ell) : R :=
+  ri_scale (edge_theta_link D) *
+  ri_scale (edge_c_to_abs_theta D j).
+
+Definition path_arithmetic (D : SchStixDiagram) (j : 'I_ell) : R :=
+  ri_scale (edge_arith_eq D) *
+  ri_scale (edge_c_to_arith_theta D j).
+
+Definition diagram_commutes (D : SchStixDiagram) : Prop :=
+  forall j : 'I_ell, path_abstract D j = path_arithmetic D j.
+
+Definition scaling_from_diagram (D : SchStixDiagram) : 'I_ell -> R :=
+  fun j => ri_scale (edge_c_to_abs_theta D j).
+
+Definition tate_curve_scaling (j : 'I_ell) : R :=
+  ((nat_of_ord j).+1 * (nat_of_ord j).+1)%:R.
+
+Definition diagram_has_tate_scaling (D : SchStixDiagram) : Prop :=
+  forall j : 'I_ell, scaling_from_diagram D j = tate_curve_scaling j.
+
+Definition diagram_has_uniform_scaling (D : SchStixDiagram) : Prop :=
+  forall j : 'I_ell, scaling_from_diagram D j = 1.
+
+Lemma tate_nonuniform_at_1 (H1 : (1 < ell)%N) :
+  tate_curve_scaling (Ordinal H1) <> 1.
+Proof. Admitted.
+
+Definition commutes_and_tate_implies (D : SchStixDiagram) : Prop :=
+  diagram_commutes D ->
+  diagram_has_tate_scaling D ->
+  forall j : 'I_ell, path_arithmetic D j = tate_curve_scaling j.
+
+Definition commutes_and_uniform_implies (D : SchStixDiagram) : Prop :=
+  diagram_commutes D ->
+  diagram_has_uniform_scaling D ->
+  forall j : 'I_ell, path_arithmetic D j = 1.
+
+End DiagramAnalysis.
+
 Section TateCurve.
 
 Variable K : fieldType.
