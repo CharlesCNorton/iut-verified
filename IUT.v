@@ -603,4 +603,17 @@ Proof.
   by move/eqP; rewrite eqr_nat.
 Qed.
 
+Theorem scholze_stix_main :
+  (ell >= 2)%N ->
+  ~ consistent_scaling.
+Proof.
+  move=> Hell Hcons.
+  have H2 : (1 <= 2 <= ell)%N by rewrite Hell andbT.
+  have := Hcons 2 H2.
+  rewrite /j_scaled_map /=.
+  move=> Heq.
+  have : (2 * 2)%:R = (1 : R) by exact Heq.
+  by apply: j_eq_2_inconsistent.
+Qed.
+
 End ConcreteDispute.
