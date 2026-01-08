@@ -352,4 +352,22 @@ Lemma jsquared_at_1 (f : 'I_ell -> R) (H1 : (1 < ell)%N) :
   jsquared_scalars f -> f (Ordinal H1) = 4%:R.
 Proof. by move=> Hj; rewrite Hj /=. Qed.
 
+Definition uniform_and_jsquared_agree (f : 'I_ell -> R) : Prop :=
+  uniform_scalars f /\ jsquared_scalars f.
+
+Lemma agree_implies_all_jsq_eq_1 (f : 'I_ell -> R) :
+  uniform_and_jsquared_agree f ->
+  forall j : 'I_ell, ((nat_of_ord j).+1 * (nat_of_ord j).+1)%:R = (1 : R).
+Proof.
+  move=> [Hu Hj] k.
+  by rewrite -Hj Hu.
+Qed.
+
+Lemma agree_implies_4_eq_1 (f : 'I_ell -> R) (H1 : (1 < ell)%N) :
+  uniform_and_jsquared_agree f -> (4%:R : R) = 1.
+Proof.
+  move=> Ha.
+  exact: (agree_implies_all_jsq_eq_1 Ha (Ordinal H1)).
+Qed.
+
 End Inconsistency.
